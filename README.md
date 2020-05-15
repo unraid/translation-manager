@@ -10,9 +10,9 @@ By default this uses `node sync.js ./base.txt ./translation.txt ./output.txt` if
 
 
 ```bash
+git clone https://github.com/unraid/translation-manager && cd translation-manager
 wget https://raw.githubusercontent.com/limetech/lang-en_US/master/main.txt -O english.txt
 wget https://raw.githubusercontent.com/limetech/lang-nl_NL/master/main.txt -O dutch.txt
-git clone https://github.com/unraid/translation-manager && cd translation-manager
 
 ./bin/sync ./english.txt ./dutch.txt ./output.txt
 ```
