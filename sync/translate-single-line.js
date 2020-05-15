@@ -20,8 +20,10 @@ const translateSingleLine = translations => (line) => {
         return line;
     }
 
+    const [_, translatedLine] = translation.split('=');
+
     // Found translation
-    return `${phrase}=${translation.split('=')[1] === undefined ? (inputExample || '') : translation.split('=')[1]}`;
+    return `${phrase}=${translatedLine === '' ? (inputExample || '') : translatedLine}`;
 };
 
 module.exports = translateSingleLine;

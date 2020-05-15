@@ -1,0 +1,5 @@
+{
+    "files.exclude": {
+        "**/output.txt": true
+    }
+}

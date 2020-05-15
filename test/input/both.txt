@@ -1,6 +1,6 @@
 webGUI=
 When received, x and=<i>Key file</i> URL box and
-Wrong File Extension=
+Wrong File Extension=this shouldn't be in the translated
 
 :diagnostics_1_plug:
 This utility is used for troubleshooting purposes. 

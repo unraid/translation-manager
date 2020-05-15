@@ -1,0 +1,27 @@
+{
+  "name": "translation-manager",
+  "version": "0.0.1",
+  "description": "This will sync the new changed lines from the english text to the other language file. For example if you added a new line to english.txt with `Apple=` it'll be added to the dutch one.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "ava": "3.8.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unraid/translation-manager.git"
+  },
+  "keywords": [],
+  "author": "Alexis Tyler <xo@wvvw.me> (https://wvvw.me/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/unraid/translation-manager/issues"
+  },
+  "homepage": "https://github.com/unraid/translation-manager#readme"
+}
