@@ -12,21 +12,24 @@ test('single-line', t => {
 
     t.is(translate('English phrase='), 'English phrase=French phrase');
     t.is(translate('English phrase with example=English example'), 'English phrase with example=English example');
-    t.is(translate('English phrase with no traslation and no example='), 'English phrase with no traslation and no example=');
+    t.is(translate('English phrase with no translation and no example='), 'English phrase with no translation and no example=');
 });
 
 
 test('multi-line', t => {
     const french = {
-        english_phrase: [],
-        english_phrase_with_example: [
-            'English example',
-            'even on multiple lines.'
-        ]
+        english_phrase: [
+            'French phrase'
+        ],
+        english_phrase_with_example: []
     };
 
     const translate = translateMultiLine(french);
 
-    t.is(translate('english_phrase'), ':english_phrase:\n\n:end');
-    t.is(translate('english_phrase_with_example'), ':english_phrase_with_example:\nEnglish example\neven on multiple lines.\n:end');
+    t.is(translate(['english_phrase', []]), ':english_phrase:\n\n:end');
+    t.is(translate(['english_phrase_with_example', [
+        'English example',
+        'even on multiple lines.'
+    ]]), ':english_phrase_with_example:\nEnglish example\neven on multiple lines.\n:end');
+    t.is(translate(['english_phrase_with_no_translation_and_no_example', []]), ':english_phrase_with_no_translation_and_no_example:\n\n:end');
 });

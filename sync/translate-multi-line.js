@@ -1,5 +1,6 @@
-const translateMultiLine = (translations) => blockName => {
-    return `:${blockName}:\n${translations[blockName].join('\n')}\n:end`;
+const translateMultiLine = (translations) => ([blockName, block]) => {
+    const translation = (block || translations[blockName]).join('\n');
+    return `:${blockName}:\n${translation}\n:end`;
 };
 
 module.exports = translateMultiLine;

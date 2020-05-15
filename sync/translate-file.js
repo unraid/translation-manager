@@ -8,7 +8,7 @@ const translateFile = (baseFilePath, translationFilePath, outputFilePath) => {
     const baseFile = parseFile(baseFilePath);
     const translationFile = parseFile(translationFilePath);
     const translatedSingleLines = baseFile.singleLines.map(translateSingleLine(translationFile.singleLines));
-    const translatedMultiLines = Object.keys(baseFile.multiLines).map(translateMultiLine(translationFile.multiLines));
+    const translatedMultiLines = Object.entries(baseFile.multiLines).map(translateMultiLine(translationFile.multiLines));
     const translatedLines = [
         ...translatedSingleLines,
         ...translatedMultiLines
