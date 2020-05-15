@@ -4,8 +4,13 @@ const path = require('path');
 const log = console;
 const args = process.argv.slice(2);
 const baseFilePath = path.resolve(args[0] || './base.txt');
-const inputFilePath = path.resolve(args[1] || './input.txt');
+const translationFilePath = path.resolve(args[1] || './translation.txt');
 const ouputFilePath = path.resolve(args[2] || './ouput.txt');
+
+const usage = (exitCode) => {
+    log.info('Usage: node sync.js ./base.txt ./translation.txt ./output.txt');
+    process.exit(exitCode || 0);
+};
 
 const checkExists = (paths) => {
     if (!Array.isArray(paths)) {
@@ -14,22 +19,21 @@ const checkExists = (paths) => {
     return paths.map(filePath => [filePath, fs.existsSync(filePath)]);
 }
 
-const filesExist = checkExists([baseFilePath, inputFilePath]).filter(([, exists]) => !exists);
+const filesExist = checkExists([baseFilePath, translationFilePath]).filter(([, exists]) => !exists);
 
-// No args, missing default files
-if (args.length === 0 && filesExist.length !== 0) {
+// No args
+if (args.length === 0) {
+    usage(1);
+}
+
+// Missing files
+if (filesExist.length !== 0) {
     log.info(`Missing files ${filesExist.map(([filePath]) => `"${filePath}"`).join(', ')}`);
     process.exit(1);
 }
 
-// Args missing files
-if (args.length >= 1 && filesExist.length !== 0) {
-    log.info('Usage: node sync.js ./base.txt ./input.txt ./output.txt');
-    process.exit(1);
-}
-
 const baseFile = fs.readFileSync(baseFilePath, 'utf-8');
-const translationFile = fs.readFileSync(inputFilePath, 'utf-8');
+const translationFile = fs.readFileSync(translationFilePath, 'utf-8');
 
 const basePhrases = baseFile.split('\n');
 const translations = translationFile.split('\n').map(line => line.split('='));
@@ -44,8 +48,8 @@ const newLanguage = basePhrases.map(line => {
     const [inputPhrase, inputExample] = line.split('=');
 
     // Weird line? Not a translation or comment
-    if (!inputPhrase) {
-        return line;
+    if (!inputPhrase || !line.includes('=')) {
+        return '';
     }
 
     // Get translation
