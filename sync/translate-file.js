@@ -25,7 +25,7 @@ const translateFile = (baseFilePath, translationFilePath, outputFilePath) => {
         return;
     }
 
-    fs.writeFileSync(outputFilePath, translatedLines, 'utf-8');
+    fs.writeFileSync(outputFilePath, translatedLines.join('\n'), 'utf-8');
 };
 
 module.exports = translateFile;

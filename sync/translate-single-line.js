@@ -21,7 +21,7 @@ const translateSingleLine = translations => (line) => {
     }
 
     // Found translation
-    return `${phrase}=${translation[1] === undefined ? (inputExample || '') : translation[1]}`;
+    return `${phrase}=${translation.split('=')[1] === undefined ? (inputExample || '') : translation.split('=')[1]}`;
 };
 
 module.exports = translateSingleLine;
