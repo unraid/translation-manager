@@ -4,22 +4,22 @@ const translateMultiLine = require('../sync/translate-multi-line');
 
 test('single-line', t => {
     const translations = [
-        'Phrase=Translation',
+        'Phrase with translation but no example=Translation',
         'Phrase with example=',
         'Phrase with example and a translation=Translation'
     ];
 
     const translate = translateSingleLine(translations);
 
-    // Phrase
-    const phrase = translate('Phrase=')
-    t.is(phrase, 'Phrase=Translation');
-    t.snapshot(phrase, 'Phrase');
+    // Phrase with translation but no example
+    const phraseWithTranslationButNoExample = translate('Phrase with translation but no example=')
+    t.is(phraseWithTranslationButNoExample, 'Phrase with translation but no example=Translation');
+    t.snapshot(phraseWithTranslationButNoExample, 'Phrase with translation but no example');
 
-    // Phrase with example
-    const phraseWithExample = translate('Phrase with example=Example');
-    t.is(phraseWithExample, 'Phrase with example=Example');
-    t.snapshot(phraseWithExample, 'Phrase with example');
+    // Phrase with example but no translation
+    const phraseWithExampleButNoTranslation = translate('Phrase with example but no translation=Example');
+    t.is(phraseWithExampleButNoTranslation, 'Phrase with example but no translation=Example');
+    t.snapshot(phraseWithExampleButNoTranslation, 'Phrase with example but no translation');
 
     // Phrase with example and translation
     const phraseWithExampleAndTranslation = translate('Phrase with example and a translation=phrase with example and a translation');
@@ -35,7 +35,7 @@ test('single-line', t => {
 
 test('multi-line', t => {
     const translations = {
-        phrase: [
+        phrase_with_translation_but_no_example: [
             'Translation'
         ],
         phrase_with_example: [],
@@ -46,18 +46,18 @@ test('multi-line', t => {
 
     const translate = translateMultiLine(translations);
 
-    // Phrase
-    const phrase = translate(['phrase', []]);
-    t.is(phrase, ':phrase:\nTranslation\n:end');
-    t.snapshot(phrase, 'Phrase');
+    // Phrase with translation but no example
+    const phraseWithTranslationButNoExample = translate(['phrase_with_translation_but_no_example', []]);
+    t.is(phraseWithTranslationButNoExample, ':phrase_with_translation_but_no_example:\nTranslation\n:end');
+    t.snapshot(phraseWithTranslationButNoExample, 'Phrase with translation but no example');
 
-    // Phrase with example
-    const phraseWithExample = translate(['phrase_with_example', [
+    // Phrase with example but no translation
+    const phraseWithExampleButNoTranslation = translate(['phrase_with_example_but_no_translation', [
         'Example text',
         'even on multiple lines.'
     ]]);
-    t.is(phraseWithExample, ':phrase_with_example:\nExample text\neven on multiple lines.\n:end');
-    t.snapshot(phraseWithExample, 'Phrase with example');
+    t.is(phraseWithExampleButNoTranslation, ':phrase_with_example_but_no_translation:\nExample text\neven on multiple lines.\n:end');
+    t.snapshot(phraseWithExampleButNoTranslation, 'Phrase with example but no translation');
 
     // Phrase with example and translation
     const phraseWithExampleAndTranslation = translate(['phrase_with_example_and_a_translation', [
