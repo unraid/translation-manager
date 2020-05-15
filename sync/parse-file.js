@@ -41,7 +41,7 @@ const parseFile = (filePath) => {
 
     return {
         singleLines,
-        multiLines
+        multiLines: Object.entries(multiLines)
     };
 };
 
