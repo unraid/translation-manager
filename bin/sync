@@ -1,0 +1,38 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const parseFile = require('../sync/parse-file');
+
+const log = console;
+const args = process.argv.slice(2);
+const baseFilePath = path.resolve(args[0] || './base.txt');
+const translationFilePath = path.resolve(args[1] || './translation.txt');
+const outputFilePath = path.resolve(args[2] || './output.txt');
+
+const usage = (exitCode) => {
+    log.info('Usage: node sync.js ./base.txt ./translation.txt ./output.txt');
+    process.exit(exitCode || 0);
+};
+
+// No args
+if (args.length === 0) {
+    usage(1);
+}
+
+const checkExists = (paths) => {
+    if (!Array.isArray(paths)) {
+        throw new Error('Only arrays allowed!');
+    }
+    return paths.map(filePath => [filePath, fs.existsSync(filePath)]);
+}
+
+const filesExist = checkExists([baseFilePath, translationFilePath]).filter(([, exists]) => !exists);
+
+// Missing files
+if (filesExist.length !== 0) {
+    log.info(`Missing files ${filesExist.map(([filePath]) => `"${filePath}"`).join(', ')}`);
+    process.exit(1);
+}
+
+// Parse the file
+parseFile(baseFilePath, translationFilePath, outputFilePath);

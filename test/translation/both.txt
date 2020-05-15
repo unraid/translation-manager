@@ -1,0 +1,9 @@
+webGUI=pretend this isn't english
+When received, x and=<i>Key file</i> URL box and
+Wrong File Extension=
+
+:diagnostics_1_plug:
+Not english text here.
+
+Oooo fancy non-english.
+:end
