@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
-const parseFile = require('../sync/parse-file');
+const translateFile = require('../sync/translate-file');
 
 const log = console;
 const args = process.argv.slice(2);
@@ -34,5 +34,5 @@ if (filesExist.length !== 0) {
     process.exit(1);
 }
 
-// Parse the file
-parseFile(baseFilePath, translationFilePath, outputFilePath);
+// Translate the file
+translateFile(baseFilePath, translationFilePath, outputFilePath);
