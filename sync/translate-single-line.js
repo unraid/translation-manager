@@ -1,4 +1,9 @@
 const translateSingleLine = translations => (line) => {
+    // Skip as this is a blank line
+    if (line.trim().length === 0) {
+        return line.trim();
+    }
+
     // Skip as this is a comment line
     if (line.startsWith(';')) {
         return line;
