@@ -13,6 +13,12 @@ const parseFile = (filePath) => {
 
     let blockName;
     lines.forEach(line => {
+        // Single-line comment
+        if (line.startsWith(';')) {
+            singleLines.push(line);
+            return;
+        }
+        
         // Starting/ending comment for multi-line translation
         if (isMultiLineComment(line)) {
             blockName = line.split(':')[1];
