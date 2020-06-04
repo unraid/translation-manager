@@ -11,7 +11,7 @@ const translateFile = (baseFilePath, translationFilePath, outputFilePath) => {
     const translatedMultiLines = baseFile.multiLines.map(translateMultiLine(translationFile.multiLines));
     const translatedLines = [
         ...translatedSingleLines,
-        ...translatedMultiLines
+        ...translatedMultiLines.map(line => `${line}\n`)
     ];
 
     if (process.env.DEBUG) {
@@ -25,7 +25,9 @@ const translateFile = (baseFilePath, translationFilePath, outputFilePath) => {
         return;
     }
 
-    fs.writeFileSync(outputFilePath, translatedLines.join('\n'), 'utf-8');
+    const singleLinesText = translatedSingleLines.join('\n').trim();
+    const multiLinesText = translatedMultiLines.join('\n\n').trim();
+    fs.writeFileSync(outputFilePath, [singleLinesText, multiLinesText].join('\n\n'), 'utf-8');
 };
 
 module.exports = translateFile;

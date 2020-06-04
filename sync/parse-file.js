@@ -12,19 +12,13 @@ const parseFile = (filePath) => {
     };
 
     let blockName;
-    lines.forEach(line => {
-        // Empty line
-        if (line.trim().length === 0) {
-            singleLines.push(line.trim());
+    lines.forEach((line, index) => {
+        // Single-line comment
+        if (line.startsWith(';')) {
+            singleLines.push({ line, index });
             return;
         }
 
-        // Single-line comment
-        if (line.startsWith(';')) {
-            singleLines.push(line);
-            return;
-        }
-        
         // Starting/ending comment for multi-line translation
         if (isMultiLineComment(line)) {
             blockName = line.split(':')[1];
@@ -47,7 +41,14 @@ const parseFile = (filePath) => {
 
         // Single-line translation
         if (line.includes('=')) {
-            singleLines.push(line);
+            singleLines.push({ line, index });
+            return;
+        }
+
+        // Empty line
+        if (line.trim().length === 0) {
+            singleLines.push({ line, index });
+            return;
         }
     });
 

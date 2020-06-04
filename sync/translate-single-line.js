@@ -1,7 +1,7 @@
-const translateSingleLine = translations => (line) => {
+const translateSingleLine = translations => ({ line, index }) => {
     // Skip as this is a blank line
     if (line.trim().length === 0) {
-        return line.trim();
+        return;
     }
 
     // Skip as this is a comment line
@@ -18,14 +18,14 @@ const translateSingleLine = translations => (line) => {
     }
 
     // Get translation
-    const translation = translations.find(translation => phrase === translation.split('=')[0]);
+    const translation = translations[index];
 
     // Can't find translation
     if (!translation) {
         return line;
     }
 
-    const [_, translatedLine] = translation.split('=');
+    const [_, translatedLine] = translation.line.split('=');
 
     // Found translation
     return `${phrase}=${translatedLine === '' ? (inputExample || '') : translatedLine}`;
