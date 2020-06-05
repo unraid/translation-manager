@@ -1,18 +1,22 @@
+// @ts-check
 const fs = require('fs');
 const translateSingleLine = require('./translate-single-line');
 const translateMultiLine = require('./translate-multi-line');
 const parseFile = require('./parse-file');
 const log = require('./log');
 
-const translateFile = (baseFilePath, translationFilePath, outputFilePath) => {
+const sortByIndexKey = (array) => array.sort((a, b) => ((a.index < b.index) ? -1 : ((a.index > b.index) ? 1 : 0)));
+const translateFile = async (baseFilePath, translationFilePath, outputFilePath) => {
     const baseFile = parseFile(baseFilePath);
     const translationFile = parseFile(translationFilePath);
-    const translatedSingleLines = baseFile.singleLines.map(translateSingleLine(translationFile.singleLines));
     const translatedMultiLines = baseFile.multiLines.map(translateMultiLine(translationFile.multiLines));
-    const translatedLines = [
-        ...translatedSingleLines,
-        ...translatedMultiLines.map(line => `${line}\n`)
-    ];
+    const translatedSingleLines = baseFile.singleLines.map(translateSingleLine(translationFile.singleLines));
+    const translatedLines = sortByIndexKey([
+        ...baseFile.blankLines,
+        ...baseFile.comments,
+        ...translatedMultiLines,
+        ...translatedSingleLines
+    ]);
 
     if (process.env.DEBUG) {
         log.info({
@@ -25,9 +29,8 @@ const translateFile = (baseFilePath, translationFilePath, outputFilePath) => {
         return;
     }
 
-    const singleLinesText = translatedSingleLines.join('\n').trim();
-    const multiLinesText = translatedMultiLines.join('\n\n').trim();
-    fs.writeFileSync(outputFilePath, [singleLinesText, multiLinesText].join('\n\n'), 'utf-8');
+    const result = translatedLines.map(({line}) => line).join('\n');
+    await fs.promises.writeFile(outputFilePath, result, 'utf-8');
 };
 
 module.exports = translateFile;

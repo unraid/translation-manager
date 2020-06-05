@@ -9,7 +9,9 @@
   "dependencies": {
     "ava": "3.8.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "tempy": "^0.5.0"
+  },
   "scripts": {
     "test": "ava"
   },
@@ -23,5 +25,11 @@
   "bugs": {
     "url": "https://github.com/unraid/translation-manager/issues"
   },
-  "homepage": "https://github.com/unraid/translation-manager#readme"
+  "homepage": "https://github.com/unraid/translation-manager#readme",
+  "ava": {
+    "files": [
+			"test/**/*",
+			"!test/examples"
+		]
+  }
 }

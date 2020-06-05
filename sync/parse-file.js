@@ -1,45 +1,55 @@
+// @ts-check
 const fs = require('fs');
+
+const isComment = line => line.startsWith(';');
+const isMultiLineTitle = line => line.startsWith(':') && (line.endsWith(':') || line.endsWith('end'));
 
 const parseFile = (filePath) => {
     const file = fs.readFileSync(filePath, 'utf-8');
     const lines = file.split('\n');
 
+    const blankLines = [];
+    const comments = [];
     const multiLines = {};
     const singleLines = [];
 
-    const isMultiLineComment = line => {
-        return line.startsWith(':') && (line.endsWith(':') || line.endsWith('end'))
-    };
-
     let blockName;
+    let blockIndex;
     lines.forEach((line, index) => {
-        // Single-line comment
-        if (line.startsWith(';')) {
-            singleLines.push({ line, index });
+        // Comment
+        if (isComment(line)) {
+            comments.push({ index, line });
             return;
         }
 
-        // Starting/ending comment for multi-line translation
-        if (isMultiLineComment(line)) {
-            blockName = line.split(':')[1];
+        // Starting/ending block for multi-line
+        if (isMultiLineTitle(line)) {
+            const currentBlockName = line.split(':')[1];
+            
             // Start
-            if (blockName !== 'end') {
+            if (currentBlockName !== 'end') {
+                blockName = currentBlockName;
+                blockIndex = index;
                 multiLines[blockName] = [];
             }
             // End
-            if (blockName === 'end') {
+            if (currentBlockName === 'end') {
+                // Ensure all multi blocks have atleast a single entry so they know their index
+                if ((multiLines[blockName]).length === 0) {
+                    multiLines[blockName].push({ index: blockIndex, line: '' });
+                }
                 blockName = undefined;
             }
             return;
         }
 
-        // We're in a multi-line comment block
+        // We're in a multi-line block
         if (blockName) {
-            multiLines[blockName].push(line);
+            multiLines[blockName].push({ index, line });
             return;
         }
 
-        // Single-line translation
+        // Single-line
         if (line.includes('=')) {
             singleLines.push({ line, index });
             return;
@@ -47,12 +57,14 @@ const parseFile = (filePath) => {
 
         // Empty line
         if (line.trim().length === 0) {
-            singleLines.push({ line, index });
+            blankLines.push({ index, line });
             return;
         }
     });
 
     return {
+        blankLines,
+        comments,
         singleLines,
         multiLines: Object.entries(multiLines)
     };
