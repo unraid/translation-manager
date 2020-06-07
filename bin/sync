@@ -26,13 +26,23 @@ const checkExists = (paths) => {
     return paths.map(filePath => [filePath, fs.existsSync(filePath)]);
 }
 
-const filesExist = checkExists([baseFilePath, translationFilePath]).filter(([, exists]) => !exists);
+const main = async () => {
+    const filesExist = checkExists([baseFilePath, translationFilePath]).filter(([, exists]) => !exists);
 
-// Missing files
-if (filesExist.length !== 0) {
-    log.info(`Missing files ${filesExist.map(([filePath]) => `"${filePath}"`).join(', ')}`);
-    process.exit(1);
-}
+    // Missing files
+    if (filesExist.length !== 0) {
+        log.info(`Missing files ${filesExist.map(([filePath]) => `"${filePath}"`).join(', ')}`);
+        process.exit(1);
+    }
+    
+    // Translate the file
+    const translation = await translateFile(baseFilePath, translationFilePath, outputFilePath);
+    
+    // Log output
+    if (process.env.DEBUG) {
+        log.info(translation);
+        return;
+    }
+};
 
-// Translate the file
-translateFile(baseFilePath, translationFilePath, outputFilePath);
+main().catch(error => console.error(error.message));
