@@ -7,7 +7,7 @@
     "test": "test"
   },
   "dependencies": {
-    "ava": "3.8.2"
+    "ava": "5.0.1"
   },
   "devDependencies": {
     "tempy": "^0.5.0"
